@@ -8,8 +8,10 @@ import (
 
 type Document struct {
 	XMLName  xml.Name `xml:"doc"`
+	Head     xml.Name `xml:"head"`
 	Contents []Mixed  `xml:",any"`
 }
+
 type Mixed struct {
 	Type  string
 	Value interface{}
