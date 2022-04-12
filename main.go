@@ -1,15 +1,15 @@
 package main
 
 import (
+	"encoding/json"
 	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 )
 
-type Document struct {
-	XMLName  xml.Name `xml:"doc"`
-	Head     xml.Name `xml:"head"`
-	Contents []Mixed  `xml:",any"`
+type EAD struct {
+	Head     string  `xml:"head" json:"head"`
+	Contents []Mixed `xml:",any" json:"contents"`
 }
 
 type Mixed struct {
@@ -23,12 +23,17 @@ func main() {
 		panic(err)
 	}
 
-	var doc Document
+	var doc EAD
 	if err := xml.Unmarshal([]byte(bytes), &doc); err != nil {
 		panic(err)
 	}
 
-	fmt.Println(doc)
+	jdoc, err := json.MarshalIndent(doc, "", "  ")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(string(jdoc))
 }
 
 func (m *Mixed) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
